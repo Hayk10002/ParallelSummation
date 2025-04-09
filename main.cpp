@@ -44,13 +44,13 @@ std::pair<std::chrono::nanoseconds, int> test_atomic(std::span<int> span, int ch
 
         for (int i = 0; i < thread_count; ++i) {
             threads.emplace_back([&]() {
-                for (int index = 0; (index = curr_index.fetch_add(chunk_size, std::memory_order::acquire)) < span.size();)                    
-                    sum.fetch_add(std::accumulate(span.begin() + index, span.begin() + std::min(index + chunk_size, (int)span.size()), 0));
+                for (int index = 0; (index = curr_index.fetch_add(chunk_size, std::memory_order::acq_rel)) < span.size();)                    
+                    sum.fetch_add(std::accumulate(span.begin() + index, span.begin() + std::min(index + chunk_size, (int)span.size()), 0), std::memory_order::acq_rel);
             });
         }
     }
 
-    return {std::chrono::high_resolution_clock::now() - start, sum.load()};
+    return {std::chrono::high_resolution_clock::now() - start, sum.load(std::memory_order::relaxed)};
 }
 
 std::pair<std::chrono::nanoseconds, int> test_mutex(std::span<int> span, int chunk_size)
