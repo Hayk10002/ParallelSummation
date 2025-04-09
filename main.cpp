@@ -105,9 +105,9 @@ int main(int argc, char* argv[])
 
     {
         auto [time, sum] = one_threaded(vec);
-        std::cout << std::format("One thread: Time: {:>7}, Sum: {:>7}\n", std::chrono::duration_cast<std::chrono::milliseconds>(time), sum);
+        std::cout << std::format("One_thread: Time: {:>7}, Sum: {:>7}\n", std::chrono::duration_cast<std::chrono::milliseconds>(time), sum);
     }
-    
+
     {
         auto [time, sum] = test_atomic(vec, chunk_size);
         std::cout << std::format("Atomic    : Time: {:>7}, Sum: {:>7}\n", std::chrono::duration_cast<std::chrono::milliseconds>(time), sum);
